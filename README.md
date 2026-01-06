@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -38,3 +39,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 =======
 >>>>>>> e14c3c4eebb334136caa533112e6d411a58eed9a
 "# Car-rental" 
+=======
+# Car Rental App 🚗
+
+A modern car rental web application built with Next.js.
+
+## Features
+- Car listings
+- Booking system
+- Responsive UI
+>>>>>>> 3507ca61ad130cd524b011cf55416fd4f0684b5d
