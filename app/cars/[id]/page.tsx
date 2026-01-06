@@ -1,11 +1,19 @@
+'use client'
+
 import { cars } from "@/lib/data"
 import RatingStars from "@/components/RatingStars"
+
+import Image from "next/image"
+import { useState } from "react"
 
 type PageProps = {
   params: { id: string }
 }
 
 export default function CarDetailsPage({ params }: PageProps) {
+  const [open, setOpen] = useState(false)
+  
+  // params.id is just a string, no need to await
   const car = cars.find(c => c.id === params.id)
 
   if (!car) {
@@ -14,12 +22,13 @@ export default function CarDetailsPage({ params }: PageProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
-      
       {/* IMAGE */}
       <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100">
-        <img
-          src={car.image}
+        <Image
+          src={car.image} // must be local or allowed domain
           alt={car.name}
+          width={600}
+          height={400}
           className="w-full h-[420px] object-cover"
         />
       </div>
@@ -44,7 +53,10 @@ export default function CarDetailsPage({ params }: PageProps) {
             ₹{car.pricePerDay}/day
           </span>
 
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition">
+          <button
+            onClick={() => setOpen(true)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition"
+          >
             Rent Now
           </button>
         </div>
@@ -55,6 +67,10 @@ export default function CarDetailsPage({ params }: PageProps) {
           </span>
         )}
       </div>
+
+      {/* Booking Modal */}
+      
+      
     </div>
   )
 }

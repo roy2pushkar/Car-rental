@@ -1,53 +1,60 @@
-/* ==========================
-   6. CAR CARD COMPONENT
-   ========================== */
+import { cars } from "@/lib/data"
+import RatingStars from "@/components/RatingStars"
+"
 
-// components/CarCard.tsx
-import Link from "next/link"
-import RatingStars from "./RatingStars"
+type PageProps = {
+  params: { id: string }
+}
 
-export default function CarCard({ car }: any) {
+export default async function CarDetailsPage({ params }: PageProps) {
+  // params is a Promise in App Router
+  const id = await params.id // unwrap the promise
+  const car = cars.find(c => c.id === id)
+
+  if (!car) {
+    return <div className="p-10 text-center">Car not found</div>
+  }
+
   return (
-    <div className="bg-white rounded-3xl shadow-md hover:shadow-xl transition overflow-hidden">
-      
-      <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-3">
+    <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
+      {/* IMAGE */}
+      <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100">
         <img
           src={car.image}
           alt={car.name}
-          className="h-44 w-full object-cover rounded-2xl"
+          className="w-full h-[420px] object-cover"
         />
       </div>
 
-      <div className="p-4">
-        <h3 className="text-xl font-semibold">{car.name}</h3>
-        <p className="text-gray-500 text-sm">
-          Model {car.model} • {car.seater} Seater
-        </p>
+      {/* DETAILS */}
+      <div>
+        <h1 className="text-4xl font-bold">{car.name}</h1>
+        <p className="text-gray-500 mt-1">Model {car.model}</p>
 
-        <RatingStars rating={car.rating} />
-
-        <div className="mt-3 text-sm text-gray-600">
-          🚕 {car.driverExperience} driver<br />
-          📍 {car.distanceIncluded}
+        <div className="mt-3">
+          <RatingStars rating={car.rating} />
         </div>
 
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-lg font-bold text-indigo-600">
+        <div className="mt-6 space-y-2 text-sm">
+          <p>🚗 Seater: <strong>{car.seater}</strong></p>
+          <p>🧑‍✈️ Driver Experience: <strong>{car.driverExperience}</strong></p>
+          <p>📍 Distance Included: <strong>{car.distanceIncluded}</strong></p>
+        </div>
+
+        <div className="mt-6 flex items-center gap-6">
+          <span className="text-3xl font-bold text-indigo-600">
             ₹{car.pricePerDay}/day
           </span>
 
-          <Link
-            href={`/cars/${car.id}`}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl"
-          >
-            Rent
-          </Link>
+          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition">
+            Rent Now
+          </button>
         </div>
 
         {car.topChoice && (
-          <p className="text-xs mt-2 text-green-600 font-semibold">
+          <span className="inline-block mt-4 text-green-600 font-semibold">
             ⭐ Top Customer Choice
-          </p>
+          </span>
         )}
       </div>
     </div>
