@@ -1,62 +1,101 @@
-import { cars } from "@/lib/data"
 import RatingStars from "@/components/RatingStars"
-"
+import { cars } from "@/lib/data"
+import Image from "next/image"
 
-type PageProps = {
-  params: { id: string }
+type FeatureProps = {
+  label: string
+  value: string
 }
 
-export default async function CarDetailsPage({ params }: PageProps) {
-  // params is a Promise in App Router
-  const id = await params.id // unwrap the promise
-  const car = cars.find(c => c.id === id)
-
-  if (!car) {
-    return <div className="p-10 text-center">Car not found</div>
-  }
-
+function Feature({ label, value }: FeatureProps) {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
-      {/* IMAGE */}
-      <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100">
-        <img
-          src={car.image}
-          alt={car.name}
-          className="w-full h-[420px] object-cover"
-        />
-      </div>
-
-      {/* DETAILS */}
-      <div>
-        <h1 className="text-4xl font-bold">{car.name}</h1>
-        <p className="text-gray-500 mt-1">Model {car.model}</p>
-
-        <div className="mt-3">
-          <RatingStars rating={car.rating} />
-        </div>
-
-        <div className="mt-6 space-y-2 text-sm">
-          <p>🚗 Seater: <strong>{car.seater}</strong></p>
-          <p>🧑‍✈️ Driver Experience: <strong>{car.driverExperience}</strong></p>
-          <p>📍 Distance Included: <strong>{car.distanceIncluded}</strong></p>
-        </div>
-
-        <div className="mt-6 flex items-center gap-6">
-          <span className="text-3xl font-bold text-indigo-600">
-            ₹{car.pricePerDay}/day
-          </span>
-
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl transition">
-            Rent Now
-          </button>
-        </div>
-
-        {car.topChoice && (
-          <span className="inline-block mt-4 text-green-600 font-semibold">
-            ⭐ Top Customer Choice
-          </span>
-        )}
-      </div>
+    <div className="rounded-2xl bg-white/10 px-4 py-4 border border-white/20 text-center">
+      <p className="text-xs uppercase tracking-wide text-gray-400">
+        {label}
+      </p>
+      <p className="mt-1 text-lg font-semibold text-white">
+        {value}
+      </p>
     </div>
+  )
+}
+
+type Car = typeof cars[number]
+
+type Props = {
+  car: Car
+}
+
+export default function CarCard({ car }: Props) {
+  return (
+    <section className="relative bg-gradient-to-br from-[#0b1220] via-[#0f172a] to-[#020617] px-6 py-20">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+
+        {/* LEFT – IMAGE */}
+        <div className="relative flex justify-center">
+          <div className="absolute -inset-10 bg-indigo-600/20 blur-3xl rounded-full" />
+
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+            <Image
+              src={car.image}
+              alt={car.name}
+              width={720}
+              height={460}
+              className="object-cover w-full h-[380px]"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* RIGHT – DETAILS */}
+        <div className="backdrop-blur-2xl bg-white/10 border border-white/20 rounded-3xl p-10 shadow-xl text-white">
+
+          {car.topChoice && (
+            <span className="inline-flex items-center gap-2 mb-4 rounded-full bg-emerald-500/20 px-4 py-1 text-sm text-emerald-400">
+              ⭐ Top Customer Choice
+            </span>
+          )}
+
+          <h1 className="text-4xl font-extrabold leading-tight">
+            {car.name}
+          </h1>
+          <p className="mt-1 text-gray-300">
+            Model {car.model}
+          </p>
+
+          <div className="mt-4">
+            <RatingStars rating={car.rating} />
+          </div>
+
+          {/* DIVIDER */}
+          <div className="my-8 h-px w-full bg-white/10" />
+
+          {/* FEATURES */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <Feature label="Seats" value={`${car.seater}`} />
+            <Feature label="Driver Exp" value={car.driverExperience} />
+            <Feature label="Distance" value={`${car.distanceIncluded} km`} />
+            <Feature label="Fuel" value="Included" />
+          </div>
+
+          {/* PRICE + CTA */}
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className="text-sm text-gray-400">
+                Starting from
+              </p>
+              <p className="text-4xl font-bold text-indigo-400">
+                ₹{car.pricePerDay}
+                <span className="text-base text-gray-400"> /day</span>
+              </p>
+            </div>
+
+            <button className="relative overflow-hidden rounded-2xl bg-indigo-600 px-10 py-4 font-semibold shadow-lg transition hover:bg-indigo-700">
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
